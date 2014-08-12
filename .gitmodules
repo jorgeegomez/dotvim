@@ -1,0 +1,36 @@
+[submodule "bundle/perl-support"]
+	path = bundle/perl-support
+	url = git://github.com/vim-scripts/perl-support.vim.git
+[submodule "bundle/securemodelines"]
+	path = bundle/securemodelines
+	url = git://github.com/ciaranm/securemodelines.git
+[submodule "bundle/ultisnips"]
+	path = bundle/ultisnips
+	url = git://github.com/SirVer/ultisnips.git
+[submodule "bundle/airline"]
+	path = bundle/airline
+	url = git://github.com/bling/vim-airline
+[submodule "bundle/coffee-script"]
+	path = bundle/coffee-script
+	url = git://github.com/kchmck/vim-coffee-script.git
+[submodule "bundle/colors-solarized"]
+	path = bundle/colors-solarized
+	url = git://github.com/altercation/vim-colors-solarized.git
+[submodule "bundle/jade"]
+	path = bundle/jade
+	url = git://github.com/digitaltoad/vim-jade.git
+[submodule "bundle/markdown"]
+	path = bundle/markdown
+	url = git://github.com/plasticboy/vim-markdown.git
+[submodule "bundle/sensible"]
+	path = bundle/sensible
+	url = git://github.com/tpope/vim-sensible.git
+[submodule "bundle/snippets"]
+	path = bundle/snippets
+	url = git://github.com/honza/vim-snippets.git
+[submodule "bundle/vinegar"]
+	path = bundle/vinegar
+	url = git://github.com/tpope/vim-vinegar.git
+[submodule "bundle/vimwiki"]
+	path = bundle/vimwiki
+	url = git://github.com/vim-scripts/vimwiki.git
