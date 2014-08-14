@@ -32,3 +32,6 @@
 [submodule "bundle/vinegar"]
 	path = bundle/vinegar
 	url = git://github.com/tpope/vim-vinegar.git
+[submodule "bundle/myvimwiki"]
+	path = bundle/vimwiki
+	url = git://github.com/jorgeegomez/vimwiki.git
