@@ -8,18 +8,6 @@ tags: $0
 ---
 endsnippet
 
-snippet newpass "Creates new password block" b
-== ${1:SiteDescription} ==
-`!v strftime("%Y-%m-%d %H:%M")`
-* ${0:jorgeegomez}
-* `gpw 1 12`
-* https://www.$1.com/
-endsnippet
-
-snippet newpass "Creates new password"
-`gpw 1 12`
-endsnippet
-
 snippet img "Inserts an HTML image tag in a Markdown Blog post" b
 <div class="row">
 	<div class="col-xs-8">
@@ -36,3 +24,20 @@ code: $0
 ---
 $1
 endsnippet
+
+priority 5
+
+snippet newpass "Creates new password inline"
+`gpw 1 11`_`pwgen -n 3 1 -1`
+endsnippet
+
+priority 10
+
+snippet newpass "Creates new password block" b
+== ${1:SiteDescription} ==
+`!v strftime("%Y-%m-%d %H:%M")`
+* ${0:jorgeegomez}
+* `gpw 1 11`_`pwgen -n 3 1 -1`
+* https://www.${1/(\w+)(\s*)/\L$1\E(?2:_:)/ag}.com/
+endsnippet
+

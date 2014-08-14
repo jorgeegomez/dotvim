@@ -1,6 +1,7 @@
 [submodule "bundle/perl-support"]
 	path = bundle/perl-support
 	url = git://github.com/vim-scripts/perl-support.vim.git
+    ignore = dirty
 [submodule "bundle/securemodelines"]
 	path = bundle/securemodelines
 	url = git://github.com/ciaranm/securemodelines.git
