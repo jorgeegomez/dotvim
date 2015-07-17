@@ -65,10 +65,9 @@ if version >= 703
   set undodir=$HOME/.vim/swap//,/tmp//
 endif
 
-" Enable the mouse in a graphic terminal
-if &term =~ "xterm"
-    setlocal mouse=a
-endif
+" Enable the mouse
+setlocal mouse=a
+set ttymouse=xterm2
 
 " http://askubuntu.com/questions/67/how-do-i-enable-full-color-support-in-vim
 "if $COLORTERM == 'gnome-terminal'
@@ -130,6 +129,15 @@ if has("autocmd")
     " When vimrc is edited, reload it
     autocmd! bufwritepost vimrc source ~/.vimrc
 endif
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" File match similar to bash style
+"-----------------------------------------------------------------------------
+" Can also add 'full', in order for third and subsequent TABs to cycle through
+" completion options
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+set wildmode=longest,list
+set wildmenu
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " vimwiki settings
