@@ -51,7 +51,9 @@ set tabstop=4
 set expandtab
 
 " use Blowfish for encryption
-if version >= 703
+if v:version >= 704
+  set cryptmethod=blowfish2
+else
   set cryptmethod=blowfish
 endif
 
@@ -61,13 +63,15 @@ map Q gq
 " Use only one dir for backups and swap files
 set backupdir=$HOME/.vim/backup//
 set directory=$HOME/.vim/swap//,/tmp//
-if version >= 703
+if v:version >= 703
   set undodir=$HOME/.vim/swap//,/tmp//
 endif
 
 " Enable the mouse
-setlocal mouse=a
+"setlocal mouse=a
+set mouse=a
 set ttymouse=xterm2
+set term=xterm
 
 " http://askubuntu.com/questions/67/how-do-i-enable-full-color-support-in-vim
 "if $COLORTERM == 'gnome-terminal'
@@ -149,7 +153,10 @@ let g:vimwiki_list = [{ 'path':'~/wiki',
     \ 'path_html':'~/wiki/html/',
     \ 'diary_rel_path': 'log/',
     \ 'diary_header': 'Journal',
-    \ 'css_name': 'markdown.css',
+    \ 'template_path': '~/wiki/html/assets/templates',
+    \ 'template_default': 'default',
+    \ 'template_ext': '.tpl',
+    \ 'css_name': 'assets/css/main.css',
     \ 'list_margin': 0 },
     \ { 'path':'~/blog',
     \ 'path_html':'/dev/null',
