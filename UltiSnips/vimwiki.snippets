@@ -16,7 +16,7 @@ snippet img "Inserts an HTML image tag in a Markdown Blog post" b
 </div>
 endsnippet
 
-snippet linea "Encabezado YAML para linea de productos Docpad" b
+snippet linea "YAML header for a product line on a Docpad page" b
 ---
 title: $1
 ruta: ${1/(\w+)(\s*)/\L$1\E(?2:_:)/ag}
@@ -28,7 +28,7 @@ endsnippet
 priority 5
 
 snippet newpass "Creates new password inline"
-`gpw 1 11`_`pwgen -n 3 1 -1`
+`gpw 1 12`_`pwgen -n 4 1 -1`
 endsnippet
 
 priority 10
@@ -37,7 +37,7 @@ snippet newpass "Creates new password block" b
 == ${1:SiteDescription} ==
 `!v strftime("%Y-%m-%d %H:%M")`
 * ${0:jorgeegomez}
-* `gpw 1 11`_`pwgen -n 3 1 -1`
+* `gpw 1 12`_`pwgen -n 4 1 -1`
 * https://www.${1/(\w+)(\s*)/\L$1\E(?2:_:)/ag}.com/
 endsnippet
 
