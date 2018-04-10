@@ -36,8 +36,8 @@ Plugin 'tpope/vim-sensible'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'digitaltoad/vim-jade'
+"Plugin 'kchmck/vim-coffee-script'
+"Plugin 'digitaltoad/vim-jade'
 Plugin 'bilalq/lite-dfm'
 Plugin 'plasticboy/vim-markdown'
 "Plugin 'vim-scripts/perl-support.vim'
@@ -46,6 +46,13 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'vimwiki/vimwiki'
 Plugin 'tpope/vim-vinegar'
+" Taskwiki - Taskwarrior in vim
+Plugin 'tbabej/taskwiki'
+Plugin 'powerman/vim-plugin-AnsiEsc'
+Plugin 'majutsushi/tagbar'
+Plugin 'farseer90718/vim-taskwarrior'
+"Plugin 'nathangrigg/vim-beancount'
+"PLugin 'junegunn/vim-easy-align'
 
 " all of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -171,41 +178,62 @@ set wildmenu
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " vimwiki settings
 "-----------------------------------------------------------------------------
-" Set up three wikis:
-" 1. General wiki 2. Journal-style blog 3. One page password list (encrypted)
+" 1. General knowledge-base wiki and log
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-let g:vimwiki_list = [{ 'path':'~/wiki',
-    \ 'path_html':'~/wiki/html/',
-    \ 'diary_rel_path': 'log/',
-    \ 'diary_header': 'Journal',
-    \ 'template_path': '~/wiki/html/assets/templates',
-    \ 'template_default': 'default',
-    \ 'template_ext': '.tpl',
-    \ 'css_name': 'assets/css/main.css',
-    \ 'list_margin': 0 },
-    \ { 'path':'~/blog',
-    \ 'path_html':'/dev/null',
-    \ 'css_name': 'assets/css/main.css',
-    \ 'index': 'diary',
-    \ 'diary_rel_path': '',
-    \ 'diary_header': 'Blog',
-    \ 'syntax': 'markdown',
-    \ 'ext': '.md',
-    \ 'list_margin': 0 },
-    \ { 'path':'~/wiki',
-    \ 'index': 'encrypted_passwords',
-    \ 'path_html':'/dev/null',
-    \ 'css_name': 'assets/css/main.css',
-    \ 'diary_rel_path': '',
-    \ 'list_margin': 0 }]
+let wiki_1 = {}
+let wiki_1.path = '~/wiki'
+let wiki_1.path_html = '~/wiki/html/'
+let wiki_1.diary_rel_path = 'log/'
+let wiki_1.diary_header = 'Journal'
+let wiki_1.template_path = '~/wiki/html/assets/templates'
+let wiki_1.template_default = 'default'
+let wiki_1.template_ext = '.tpl'
+let wiki_1.css_name = 'assets/css/main.css'
+let wiki_1.list_margin = 0
+
+" 2. Markdown blog with the journal page as front
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+let wiki_2 = {}
+let wiki_2.path = '~/blog'
+let wiki_2.path_html = '/dev/null'
+let wiki_2.css_name = 'assets/css/main.css'
+let wiki_2.index = 'diary'
+let wiki_2.diary_rel_path = ''
+let wiki_2.diary_header = 'Blog'
+let wiki_2.syntax = 'markdown'
+let wiki_2.ext = '.md'
+let wiki_2.list_margin = 0
+
+" 3. Encrypted front page for a password vault
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+let wiki_3 = {}
+let wiki_3.path = '~/wiki'
+let wiki_3.index = 'encrypted_passwords'
+let wiki_3.path_html = '/dev/null'
+let wiki_3.css_name = 'assets/css/main.css'
+let wiki_3.diary_rel_path = ''
+let wiki_3.list_margin = 0
+
+let g:vimwiki_list = [wiki_1, wiki_2, wiki_3]
 let g:vimwiki_folding = 'syntax'
 " Disable Tab on insert mode (conflicts with UltiSnips)
 let g:vimwiki_table_mappings = 0
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" taskwiki settings
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+set concealcursor=
+let g:taskwiki_disable_concealcursor = 1
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " vim-markdown settings
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-let g:vim_markdown_folding_disabled=1
+let g:vim_markdown_folding_disabled = 1
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" LiteDFM - A lightweight plugin to remove distractions
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+nnoremap <Leader>z :LiteDFMToggle<CR>:silent !tmux set status > /dev/null 2>&1<CR>:redraw!<CR>
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Keybindings
@@ -270,6 +298,14 @@ let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_splits = 0
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" beancount
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"let g:beancount_separator_col = 90
+"let b:beancount_root = "main.beancount"
+"nnoremap <buffer> <leader>= :AlignCommodity<CR>
+"vnoremap <buffer> <leader>= :AlignCommodity<CR>
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " securemodelines
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -297,3 +333,12 @@ let g:secure_modelines_allowed_items = [
     \ "spell",
     \ "spelllang"
     \ ]
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" easy-align
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+" xmap ga <Plug>(EasyAlign)
+"
+" " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+" nmap ga <Plug>(EasyAlign)
