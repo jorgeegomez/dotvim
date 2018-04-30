@@ -36,11 +36,9 @@ Plugin 'tpope/vim-sensible'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-"Plugin 'kchmck/vim-coffee-script'
-"Plugin 'digitaltoad/vim-jade'
+" LiteDFM: A lightweight plugin to remove distractions
 Plugin 'bilalq/lite-dfm'
 Plugin 'plasticboy/vim-markdown'
-"Plugin 'vim-scripts/perl-support.vim'
 Plugin 'ciaranm/securemodelines'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
@@ -51,8 +49,10 @@ Plugin 'tbabej/taskwiki'
 Plugin 'powerman/vim-plugin-AnsiEsc'
 Plugin 'majutsushi/tagbar'
 Plugin 'farseer90718/vim-taskwarrior'
+" Ranger file manager integration
+Plugin 'rafaqz/ranger.vim'
 "Plugin 'nathangrigg/vim-beancount'
-"PLugin 'junegunn/vim-easy-align'
+"Plugin 'junegunn/vim-easy-align'
 
 " all of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -162,6 +162,9 @@ if has("autocmd")
 
     augroup END
 
+    " When a swap file exists, open the file in read-only mode
+    " autocmd SwapExists * let v:swapchoice = "o"
+
     " When vimrc is edited, reload it
     autocmd! bufwritepost vimrc source ~/.vimrc
 endif
@@ -176,7 +179,23 @@ set wildmode=longest,list
 set wildmenu
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" vimwiki settings
+" Keybindings
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+" Insert timestamp
+nmap <F3> a<C-R>=strftime("%FT%T%z")<CR><Esc>
+imap <F3> <C-R>=strftime("%FT%T%z")<CR>
+
+" Make shift-insert work like in Xterm
+map <S-Insert> <MiddleMouse>
+map! <S-Insert> <MiddleMouse>
+
+"=============================================================================
+" Plugin settings
+"=============================================================================
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" vimwiki
 "-----------------------------------------------------------------------------
 " 1. General knowledge-base wiki and log
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -220,32 +239,20 @@ let g:vimwiki_folding = 'syntax'
 let g:vimwiki_table_mappings = 0
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" taskwiki settings
+" taskwiki
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 set concealcursor=
 let g:taskwiki_disable_concealcursor = 1
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" vim-markdown settings
+" vim-markdown
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 let g:vim_markdown_folding_disabled = 1
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" LiteDFM - A lightweight plugin to remove distractions
+" LiteDFM
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 nnoremap <Leader>z :LiteDFMToggle<CR>:silent !tmux set status > /dev/null 2>&1<CR>:redraw!<CR>
-
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" Keybindings
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-" Insert timestamp
-nmap <F3> a<C-R>=strftime("%FT%T%z")<CR><Esc>
-imap <F3> <C-R>=strftime("%FT%T%z")<CR>
-
-" Make shift-insert work like in Xterm
-map <S-Insert> <MiddleMouse>
-map! <S-Insert> <MiddleMouse>
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " vim-airline
@@ -260,21 +267,21 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
-" enable/disable displaying tab number in tabs mode.
+" Enable/disable displaying tab number in tabs mode.
 let g:airline#extensions#tabline#show_tab_nr = 1
 
 let g:airline#extensions#tabline#tab_nr_type = 1
 
-" enable/disable displaying tab type (far right) >
+" Enable/disable displaying tab type (far right) >
 let g:airline#extensions#tabline#show_tab_type = 1
 
-" rename label for buffers (default: 'buffers') (c)
+" Rename label for buffers (default: 'buffers') (c)
 let g:airline#extensions#tabline#buffers_label = 'b'
 
-" rename label for tabs (default: 'tabs') (c)
+" Rename label for tabs (default: 'tabs') (c)
 let g:airline#extensions#tabline#tabs_label = 't'
 
-" enable/disable displaying index of the buffer.
+" Enable/disable displaying index of the buffer.
 " When enabled, numbers will be displayed in the tabline and mappings will be
 " exposed to allow you to select a buffer directly.  Up to 9 mappings will be
 " exposed.
@@ -292,7 +299,7 @@ nmap <leader>9 <Plug>AirlineSelectTab9
 nmap <leader>- <Plug>AirlineSelectPrevTab
 nmap <leader>+ <Plug>AirlineSelectNextTab
 
-" configure whether close button should be shown: >
+" Configure whether close button should be shown:
 let g:airline#extensions#tabline#show_close_button = 0
 
 let g:airline#extensions#tabline#show_splits = 0
@@ -342,3 +349,15 @@ let g:secure_modelines_allowed_items = [
 "
 " " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 " nmap ga <Plug>(EasyAlign)
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" ranger.vim
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+map <leader>rr :RangerEdit<cr>
+map <leader>rv :RangerVSplit<cr>
+map <leader>rs :RangerSplit<cr>
+map <leader>rt :RangerTab<cr>
+map <leader>ri :RangerInsert<cr>
+map <leader>ra :RangerAppend<cr>
+map <leader>rc :set operatorfunc=RangerChangeOperator<cr>g@
+

@@ -1,4 +1,5 @@
 backup
 swap
-.netrwhist
 bundle/**
+.netrwhist
+view
