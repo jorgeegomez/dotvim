@@ -83,7 +83,7 @@ set tabstop=4
 set expandtab
 
 " use Blowfish for encryption
-if v:version >= 704
+if v:version == 704 && has('patch399') || v:version > 704
   set cryptmethod=blowfish2
 else
   set cryptmethod=blowfish
