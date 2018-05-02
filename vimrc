@@ -6,8 +6,8 @@
 "   Damian Conway <damian@conway.org>
 "   Tsung-Hsiang (Sean) Chang <vgod@vgod.tw>
 "-----------------------------------------------------------------------------
-" Uses Vundle to manage plugins
-"   https://github.com/VundleVim/
+" Uses vim-plug to manage plugins
+"   https://github.com/junegunn/vim-plug
 " Uses Solarized color scheme
 "   http://ethanschoonover.com/solarized
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -22,57 +22,67 @@ endif
 set nocompatible
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" Use the Vundle plugin manager
-" (https://github.com/VundleVim/Vundle.vim#quick-start)
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-filetype off
-set runtimepath+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Install plugins with vim-plug
+"filetype off
+call plug#begin('~/.vim/plugged')
 
-" Load plugins with Vundle
-Plugin 'VundleVim/Vundle.vim'
-
-Plugin 'tpope/vim-sensible'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-" LiteDFM: A lightweight plugin to remove distractions
-Plugin 'bilalq/lite-dfm'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'ciaranm/securemodelines'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
-Plugin 'vimwiki/vimwiki'
-Plugin 'tpope/vim-vinegar'
+" Defaults everyone can agree on
+Plug 'tpope/vim-sensible'
+" Precision colorscheme for vim
+Plug 'altercation/vim-colors-solarized'
+" Lightline - Light and configurable statusline/tabline
+Plug 'itchyny/lightline.vim'
+" Lean & mean status/tabline for vim
+"Plug 'vim-airline/vim-airline'
+" A collection of themes for vim-airline
+"Plug 'vim-airline/vim-airline-themes'
+" Tmux statusline generator 
+Plug 'edkolev/tmuxline.vim'
+" liteDFM: A lightweight plugin to remove distractions
+Plug 'bilalq/lite-dfm'
+" Markdown vim mode
+Plug 'plasticboy/vim-markdown'
+" A secure alternative to Vim modelines
+Plug 'ciaranm/securemodelines'
+" The ultimate snippet solution for Vim
+Plug 'SirVer/ultisnips'
+" Default snipMate & UltiSnip Snippets
+Plug 'honza/vim-snippets'
+" Personal Wiki for Vim
+Plug 'vimwiki/vimwiki'
 " Taskwiki - Taskwarrior in vim
-Plugin 'tbabej/taskwiki'
-Plugin 'powerman/vim-plugin-AnsiEsc'
-Plugin 'majutsushi/tagbar'
-Plugin 'farseer90718/vim-taskwarrior'
-" Ranger file manager integration
-Plugin 'rafaqz/ranger.vim'
-"Plugin 'nathangrigg/vim-beancount'
-"Plugin 'junegunn/vim-easy-align'
+Plug 'tbabej/taskwiki'
+" Taskwarrior in vim - Enables grid view
+Plug 'blindFS/vim-taskwarrior'
+" Adds color support in Taskwiki charts
+Plug 'powerman/vim-plugin-AnsiEsc'
+" Provides taskwiki file navigation
+Plug 'majutsushi/tagbar'
+" Modify default netrw settings
+Plug 'tpope/vim-vinegar'
+" Beancount - Command line accounting
+"Plug 'nathangrigg/vim-beancount'
+" A Vim alignment plugin
+"Plug 'junegunn/vim-easy-align'
 
-" all of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+call plug#end()
 "-----------------------------------------------------------------------------
 
 let mapleader=","      " change leader key to ,
 let maplocalleader="," " change local leader key to ,
 
 if has("vms")
-    set nobackup	  " do not keep a backup file, use versions instead
+    set nobackup	  " Do not keep a backup file, use versions instead
 else
-    set backup	      " keep a backup file
+    set backup	      " Keep a backup file
 endif
-set history=50		  " keep 50 lines of command line history
-set ruler             " show the cursor position all the time
+set history=50		  " Keep 50 lines of command line history
+set ruler             " Show the cursor position all the time
 set relativenumber    " Show line numbers offset from current one
 set number            " Show current line number
-set noshowcmd		  " display incomplete commands
-set incsearch		  " do incremental searching
+set noshowcmd		  " Display incomplete commands
+set noshowmode        " Don't show --Insert-- since using lightline
+set incsearch		  " Do incremental searching
 set foldlevelstart=99 " Don't start with folds collapsed
 
 " Indentation (other settings are on vim-sensible)
@@ -255,54 +265,88 @@ let g:vim_markdown_folding_disabled = 1
 nnoremap <Leader>z :LiteDFMToggle<CR>:silent !tmux set status > /dev/null 2>&1<CR>:redraw!<CR>
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" lightline
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+let g:lightline = {
+      \ 'colorscheme': 'solarized',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'filename' ],
+      \             [ 'ctrlpmark', 'tagbar'] ],
+      \ },
+      \ 'component_function': {
+      \   'filename': 'LightlineFilename',
+      \ },
+      \ 'component': {
+      \   'tagbar': '%{tagbar#currenttag("[%s]", "")}',
+      \ }
+      \ }
+
+let g:lightline.tabline = {
+  \   'left': [ ['tabs'] ],
+  \   'right': [ ]
+  \ }
+set showtabline=2  " Show tabline
+set guioptions-=e  " Don't use GUI tabline
+
+function! LightlineFilename()
+    let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
+    let modified = &modified ? ' +' : ''
+    return filename . modified
+endfunction
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" tmuxline
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+let g:tmuxline_separators = {
+    \ 'left' : '',
+    \ 'left_alt': '',
+    \ 'right' : '',
+    \ 'right_alt' : '',
+    \ 'space' : ' '}
+
+let g:tmuxline_theme = 'lightline'
+let g:tmuxline_preset = 'minimal'
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " vim-airline
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-let g:airline_powerline_fonts = 0
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-let g:airline_theme = 'solarized'
-
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-
+"let g:airline_powerline_fonts = 0
+"let g:airline_left_sep = ''
+"let g:airline_right_sep = ''
+"let g:airline_theme = 'solarized'
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#left_sep = ' '
+"let g:airline#extensions#tabline#left_alt_sep = '|'
 " Enable/disable displaying tab number in tabs mode.
-let g:airline#extensions#tabline#show_tab_nr = 1
-
-let g:airline#extensions#tabline#tab_nr_type = 1
-
+"let g:airline#extensions#tabline#show_tab_nr = 1
+"let g:airline#extensions#tabline#tab_nr_type = 1
 " Enable/disable displaying tab type (far right) >
-let g:airline#extensions#tabline#show_tab_type = 1
-
+"let g:airline#extensions#tabline#show_tab_type = 1
 " Rename label for buffers (default: 'buffers') (c)
-let g:airline#extensions#tabline#buffers_label = 'b'
-
+"let g:airline#extensions#tabline#buffers_label = 'b'
 " Rename label for tabs (default: 'tabs') (c)
-let g:airline#extensions#tabline#tabs_label = 't'
-
+"let g:airline#extensions#tabline#tabs_label = 't'
 " Enable/disable displaying index of the buffer.
 " When enabled, numbers will be displayed in the tabline and mappings will be
 " exposed to allow you to select a buffer directly.  Up to 9 mappings will be
 " exposed.
-
-let g:airline#extensions#tabline#buffer_idx_mode = 1
-nmap <leader>1 <Plug>AirlineSelectTab1
-nmap <leader>2 <Plug>AirlineSelectTab2
-nmap <leader>3 <Plug>AirlineSelectTab3
-nmap <leader>4 <Plug>AirlineSelectTab4
-nmap <leader>5 <Plug>AirlineSelectTab5
-nmap <leader>6 <Plug>AirlineSelectTab6
-nmap <leader>7 <Plug>AirlineSelectTab7
-nmap <leader>8 <Plug>AirlineSelectTab8
-nmap <leader>9 <Plug>AirlineSelectTab9
-nmap <leader>- <Plug>AirlineSelectPrevTab
-nmap <leader>+ <Plug>AirlineSelectNextTab
-
+"let g:airline#extensions#tabline#buffer_idx_mode = 1
+"nmap <leader>1 <Plug>AirlineSelectTab1
+"nmap <leader>2 <Plug>AirlineSelectTab2
+"nmap <leader>3 <Plug>AirlineSelectTab3
+"nmap <leader>4 <Plug>AirlineSelectTab4
+"nmap <leader>5 <Plug>AirlineSelectTab5
+"nmap <leader>6 <Plug>AirlineSelectTab6
+"nmap <leader>7 <Plug>AirlineSelectTab7
+"nmap <leader>8 <Plug>AirlineSelectTab8
+"nmap <leader>9 <Plug>AirlineSelectTab9
+"nmap <leader>- <Plug>AirlineSelectPrevTab
+"nmap <leader>+ <Plug>AirlineSelectNextTab
 " Configure whether close button should be shown:
-let g:airline#extensions#tabline#show_close_button = 0
-
-let g:airline#extensions#tabline#show_splits = 0
+"let g:airline#extensions#tabline#show_close_button = 0
+"let g:airline#extensions#tabline#show_splits = 0
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " beancount
@@ -349,15 +393,4 @@ let g:secure_modelines_allowed_items = [
 "
 " " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 " nmap ga <Plug>(EasyAlign)
-
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" ranger.vim
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-map <leader>rr :RangerEdit<cr>
-map <leader>rv :RangerVSplit<cr>
-map <leader>rs :RangerSplit<cr>
-map <leader>rt :RangerTab<cr>
-map <leader>ri :RangerInsert<cr>
-map <leader>ra :RangerAppend<cr>
-map <leader>rc :set operatorfunc=RangerChangeOperator<cr>g@
 
