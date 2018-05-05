@@ -60,6 +60,8 @@ Plug 'powerman/vim-plugin-AnsiEsc'
 Plug 'majutsushi/tagbar'
 " Modify default netrw settings
 Plug 'tpope/vim-vinegar'
+" Ranger file manager integration
+Plug 'francoiscabrol/ranger.vim'
 " Beancount - Command line accounting
 "Plug 'nathangrigg/vim-beancount'
 " A Vim alignment plugin
@@ -307,6 +309,11 @@ let g:tmuxline_separators = {
 
 let g:tmuxline_theme = 'lightline'
 let g:tmuxline_preset = 'minimal'
+augroup tmuxline
+    autocmd!
+    autocmd VimEnter,ColorScheme * silent! Tmuxline
+    autocmd VimLeave * !tmux source-file ~/.byobu/profile.tmux
+augroup END
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " vim-airline
@@ -394,3 +401,9 @@ let g:secure_modelines_allowed_items = [
 " " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 " nmap ga <Plug>(EasyAlign)
 
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" ranger
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+let g:ranger_map_keys = 0
+map <leader>ff :Ranger<CR>
+map <leader>ft :RangerNewTab<CR>
