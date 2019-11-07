@@ -16,5 +16,5 @@ and log of daily activities.
 1. `cd .vim`
 1. `mkdir {backup,swap}`
 1. `curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim`
-3. `vim +PlugInstall +qall`
-4. `echo "alias vw='vim -c VimwikiIndex'" >> ~/.bash_aliases`
+1. `vim +PlugInstall +qall`
+1. `echo "alias vw='vim -c VimwikiIndex'" >> ~/.bash_aliases`

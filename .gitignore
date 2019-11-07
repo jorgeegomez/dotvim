@@ -1,5 +1,6 @@
 backup
 swap
 plugged/**
+autoload/plug.vim
 .netrwhist
 view

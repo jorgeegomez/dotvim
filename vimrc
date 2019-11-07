@@ -60,8 +60,10 @@ Plug 'powerman/vim-plugin-AnsiEsc'
 Plug 'majutsushi/tagbar'
 " Modify default netrw settings
 Plug 'tpope/vim-vinegar'
+" nnn file manager integration
+Plug 'mcchrish/nnn.vim'
 " Ranger file manager integration
-Plug 'francoiscabrol/ranger.vim'
+"Plug 'francoiscabrol/ranger.vim'
 " Beancount - Command line accounting
 "Plug 'nathangrigg/vim-beancount'
 " A Vim alignment plugin
@@ -219,7 +221,7 @@ let wiki_1.diary_header = 'Journal'
 let wiki_1.template_path = '~/wiki/html/assets/templates'
 let wiki_1.template_default = 'default'
 let wiki_1.template_ext = '.tpl'
-let wiki_1.css_name = 'assets/css/main.css'
+let wiki_1.css_name = 'assets/css/vimwiki_default.css'
 let wiki_1.list_margin = 0
 
 " 2. Markdown blog with the journal page as front
@@ -227,25 +229,15 @@ let wiki_1.list_margin = 0
 let wiki_2 = {}
 let wiki_2.path = '~/blog'
 let wiki_2.path_html = '/dev/null'
-let wiki_2.css_name = 'assets/css/main.css'
+let wiki_2.css_name = 'assets/css/vimwiki_default.css'
 let wiki_2.index = 'diary'
-let wiki_2.diary_rel_path = ''
+let wiki_2.diary_rel_path = '.'
 let wiki_2.diary_header = 'Blog'
 let wiki_2.syntax = 'markdown'
 let wiki_2.ext = '.md'
 let wiki_2.list_margin = 0
 
-" 3. Encrypted front page for a password vault
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-let wiki_3 = {}
-let wiki_3.path = '~/wiki'
-let wiki_3.index = 'encrypted_passwords'
-let wiki_3.path_html = '/dev/null'
-let wiki_3.css_name = 'assets/css/main.css'
-let wiki_3.diary_rel_path = ''
-let wiki_3.list_margin = 0
-
-let g:vimwiki_list = [wiki_1, wiki_2, wiki_3]
+let g:vimwiki_list = [wiki_1, wiki_2]
 let g:vimwiki_folding = 'syntax'
 " Disable Tab on insert mode (conflicts with UltiSnips)
 let g:vimwiki_table_mappings = 0
@@ -265,6 +257,17 @@ let g:vim_markdown_folding_disabled = 1
 " LiteDFM
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 nnoremap <Leader>z :LiteDFMToggle<CR>:silent !tmux set status > /dev/null 2>&1<CR>:redraw!<CR>
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" UltiSnips
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" Trigger configuration
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " lightline
@@ -356,14 +359,6 @@ augroup END
 "let g:airline#extensions#tabline#show_splits = 0
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" beancount
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"let g:beancount_separator_col = 90
-"let b:beancount_root = "main.beancount"
-"nnoremap <buffer> <leader>= :AlignCommodity<CR>
-"vnoremap <buffer> <leader>= :AlignCommodity<CR>
-
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " securemodelines
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -393,6 +388,14 @@ let g:secure_modelines_allowed_items = [
     \ ]
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" beancount
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"let g:beancount_separator_col = 67
+"let b:beancount_root = "/root/main.beancount"
+"nnoremap <buffer> <leader>= :AlignCommodity<CR>
+"vnoremap <buffer> <leader>= :AlignCommodity<CR>
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " easy-align
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -404,6 +407,24 @@ let g:secure_modelines_allowed_items = [
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " ranger
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-let g:ranger_map_keys = 0
-map <leader>ff :Ranger<CR>
-map <leader>ft :RangerNewTab<CR>
+"let g:ranger_map_keys = 0
+"map <leader>ff :Ranger<CR>
+"map <leader>ft :RangerNewTab<CR>
+
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" nnn
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+let g:nnn#set_default_mappings = 0
+nnoremap <leader>n :NnnPicker '%:p:h'<CR>
+" nnoremap <silent> <leader>nn :NnnPicker<CR>
+" Opens the nnn window in a split
+"let g:nnn#layout = 'tabnew' " or vnew, new etc.
+let g:nnn#replace_netrw = 1 " Open nnn instead of netrw when opening a directory
+"let $NNN_RESTRICT_NAV_OPEN=1
+let g:nnn#command = 'NNN_RESTRICT_NAV_OPEN=1 NNN_CONTEXT_COLORS="4236" nnn'
+let g:nnn#action = {
+    \ '<c-t>': 'tab split',
+    \ '<c-x>': 'split',
+    \ '<c-v>': 'vsplit' }
+let g:nnn#statusline = 0
+
