@@ -5,3 +5,4 @@ autoload/plug.vim
 .netrwhist
 view
 *.old
+

@@ -50,24 +50,20 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 " Personal Wiki for Vim
 Plug 'vimwiki/vimwiki'
-" Taskwiki - Taskwarrior in vim
-Plug 'tbabej/taskwiki'
-" Taskwarrior in vim - Enables grid view
-Plug 'blindFS/vim-taskwarrior'
-" Adds color support in Taskwiki charts
-Plug 'powerman/vim-plugin-AnsiEsc'
-" Provides taskwiki file navigation
-Plug 'majutsushi/tagbar'
+" Auto-generates and navigates through a file's tags
+Plug 'preservim/tagbar'
 " Modify default netrw settings
 Plug 'tpope/vim-vinegar'
 " nnn file manager integration
 Plug 'mcchrish/nnn.vim'
-" Ranger file manager integration
-"Plug 'francoiscabrol/ranger.vim'
+" Ansible syntax plugin
+Plug 'pearofducks/ansible-vim'
 " Beancount - Command line accounting
 "Plug 'nathangrigg/vim-beancount'
 " A Vim alignment plugin
 "Plug 'junegunn/vim-easy-align'
+"Vim syntax for TOML
+Plug 'cespare/vim-toml'
 
 call plug#end()
 "-----------------------------------------------------------------------------
@@ -133,12 +129,15 @@ set term=xterm
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
 if &t_Co > 2 || has("gui_running")
-    " set t_Co=16
+    "set t_Co=256
     syntax enable
     set background=dark
     set hlsearch
+    "let g:solarized_termcolors=256
+    "let g:solarized_visibility="high"
+    "let g:solarized_contrast="high"
     colorscheme solarized
-    set guifont=Inconsolata\ Medium\ 16
+    "set guifont=Inconsolata\ Medium\ 16
 endif
 
 if has("viminfo")
@@ -224,6 +223,8 @@ let wiki_1.template_ext = '.tpl'
 let wiki_1.css_name = 'assets/css/vimwiki_default.css'
 let wiki_1.list_margin = 0
 
+let wiki_1.nested_syntaxes = {'python': 'python', 'console': 'bash', 'nginx': 'conf'}
+
 " 2. Markdown blog with the journal page as front
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 let wiki_2 = {}
@@ -237,16 +238,23 @@ let wiki_2.syntax = 'markdown'
 let wiki_2.ext = '.md'
 let wiki_2.list_margin = 0
 
-let g:vimwiki_list = [wiki_1, wiki_2]
+" 3. Markdown blog with the journal page as front, for IT communications
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+let it_blog = {}
+let it_blog.path = '~/Documents/Communication/IT_blog'
+let it_blog.path_html = '/dev/null'
+"let it_blog.css_name = 'assets/css/vimwiki_default.css'
+let it_blog.index = 'diary'
+let it_blog.diary_rel_path = '.'
+let it_blog.diary_header = 'IT Blog'
+let it_blog.syntax = 'markdown'
+let it_blog.ext = '.md'
+let it_blog.list_margin = 0
+
+let g:vimwiki_list = [wiki_1, wiki_2, it_blog]
 let g:vimwiki_folding = 'syntax'
 " Disable Tab on insert mode (conflicts with UltiSnips)
 let g:vimwiki_table_mappings = 0
-
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" taskwiki
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-set concealcursor=
-let g:taskwiki_disable_concealcursor = 1
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " vim-markdown
@@ -276,15 +284,34 @@ let g:lightline = {
       \ 'colorscheme': 'solarized',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename' ],
-      \             [ 'ctrlpmark', 'tagbar'] ],
+      \             [ 'readonly', 'filename' ] ],
+      \ 'right': [ [ 'lineinfo' ],
+      \            [ 'percent' ],
+      \            [ 'fileformat', 'fileencoding', 'filetype' ],
+      \            [ 'tagbar' ] ]
       \ },
       \ 'component_function': {
       \   'filename': 'LightlineFilename',
+      \   'fileformat': 'LightlineFileformat',
+      \   'fileencoding': 'LightlineFileencoding',
+      \   'filetype': 'LightlineFiletype',
       \ },
       \ 'component': {
       \   'tagbar': '%{tagbar#currenttag("[%s]", "")}',
-      \ }
+      \ },
+      \ 'mode_map': {
+      \   'n' : 'N',
+      \   'i' : 'I',
+      \   'R' : 'R',
+      \   'v' : 'V',
+      \   'V' : 'VL',
+      \   "\<C-v>": 'VB',
+      \   'c' : 'C',
+      \   's' : 'S',
+      \   'S' : 'SL',
+      \   "\<C-s>": 'SB',
+      \   't': 'T',
+      \ },
       \ }
 
 let g:lightline.tabline = {
@@ -298,6 +325,21 @@ function! LightlineFilename()
     let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
     let modified = &modified ? ' +' : ''
     return filename . modified
+endfunction
+
+" Trim file format information on narrow windows (hide if it's unix)
+function! LightlineFileformat()
+  return &fileformat ==# 'unix' || winwidth(0) <= 60 ? '' : &fileformat
+endfunction
+
+" Trim file encoding information on narrow windows (hide if it's utf-8)
+function! LightlineFileencoding()
+  return &fileencoding ==# 'utf-8' || winwidth(0) <= 60 ? '' : &fileencoding
+endfunction
+
+" Trim file type information on narrow windows
+function! LightlineFiletype()
+  return winwidth(0) > 60 ? &filetype : ''
 endfunction
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -415,7 +457,7 @@ let g:secure_modelines_allowed_items = [
 " nnn
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 let g:nnn#set_default_mappings = 0
-nnoremap <leader>n :NnnPicker '%:p:h'<CR>
+nnoremap <leader>n :NnnPicker %:p:h<CR>
 " nnoremap <silent> <leader>nn :NnnPicker<CR>
 " Opens the nnn window in a split
 "let g:nnn#layout = 'tabnew' " or vnew, new etc.

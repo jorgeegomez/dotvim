@@ -32,3 +32,28 @@ snippet newpass "Creates new password block" b
 * https://www.${1/(\w+)(\s*)/\L$1\E(?2:_:)/ag}.com/
 endsnippet
 
+snippet itblog "Inserts YAML headers for Markdown blog post for IT"
+---
+# ${1:BlogPostTitle}
+title: $1
+date: `!v strftime("%Y-%m-%dT%H:%M:00")`
+template: post
+author: Jorge E. Gómez
+---
+
+# $1
+
+## Área de TI
+
+## Seguridad de la información
+
+## Conectividad
+
+## Acompañamiento a otras áreas
+
+## Sucursales
+
+## Software
+
+## Equipos
+endsnippet
